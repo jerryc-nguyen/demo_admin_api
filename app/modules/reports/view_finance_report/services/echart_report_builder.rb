@@ -9,19 +9,30 @@ module Reports
           @reports = reports
         end
 
+        def format_report_date(date)
+          I18n.l(date, format: :long)
+        end
+
         def call
-          dates = (0..6).map { |i| @start_date + i }
-          
+          dates = (0..6).map { |i| (@start_date + i.days).to_date }
+
           indexed_reports = @reports.each_with_object({}) do |report, hash|
-            hash[[report.date, report.value_type]] = report.value.to_f
+            hash[[format_report_date(report.date), report.value_type]] = report.value.to_f
           end
 
-          pos_revenue_data = dates.map { |date| indexed_reports[[date, "pos_revenue"]] || 0.0 }
-          eatclub_revenue_data = dates.map { |date| indexed_reports[[date, "eatclub_revenue"]] || 0.0 }
-          labour_cost_data = dates.map { |date| indexed_reports[[date, "labour_cost"]] || 0.0 }
+          pos_revenue_data = dates.map { |date| indexed_reports[[format_report_date(date), "pos_revenue"]] || 0.0 }
+          eatclub_revenue_data = dates.map { |date| indexed_reports[[format_report_date(date), "eatclub_revenue"]] || 0.0 }
+          labour_cost_data = dates.map { |date| indexed_reports[[format_report_date(date), "labour_cost"]] || 0.0 }
+
 
           {
-            categories: DAYS_OF_WEEK,
+            xAxis: {
+              type: 'category',
+              data: DAYS_OF_WEEK
+            },
+            yAxis: {
+              type: 'value'
+            },
             dates: dates.map(&:to_s),
             series: [
               {
