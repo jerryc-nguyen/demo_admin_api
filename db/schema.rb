@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2026_08_10_114000) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "daily_finance_reports", force: :cascade do |t|
     t.date "date", null: false
     t.string "value_type", null: false

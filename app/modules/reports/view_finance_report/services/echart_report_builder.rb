@@ -24,7 +24,6 @@ module Reports
           eatclub_revenue_data = dates.map { |date| indexed_reports[[format_report_date(date), "eatclub_revenue"]] || 0.0 }
           labour_cost_data = dates.map { |date| indexed_reports[[format_report_date(date), "labour_cost"]] || 0.0 }
 
-
           {
             xAxis: {
               type: 'category',

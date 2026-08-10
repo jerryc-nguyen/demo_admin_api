@@ -95,6 +95,10 @@ GEM
     debug (1.11.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    dotenv (3.2.0)
+    dotenv-rails (3.2.0)
+      dotenv (= 3.2.0)
+      railties (>= 6.1)
     drb (2.2.3)
     erb (4.0.4.1)
       cgi (>= 0.3.3)
@@ -139,6 +143,9 @@ GEM
     nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
+    pg (1.6.3-aarch64-linux)
+    pg (1.6.3-arm64-darwin)
+    pg (1.6.3-x86_64-linux)
     pp (0.6.4)
       prettyprint
     prettyprint (0.2.0)
@@ -196,8 +203,6 @@ GEM
     reline (0.7.0)
       io-console (~> 0.5)
     securerandom (0.4.1)
-    sqlite3 (2.8.1)
-      mini_portile2 (~> 2.8.0)
     stringio (3.2.0)
     thor (1.5.0)
     timeout (0.6.1)
@@ -219,10 +224,11 @@ DEPENDENCIES
   bootsnap
   byebug
   debug
+  dotenv-rails
   error_highlight (>= 0.4.0)
+  pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.1.6)
-  sqlite3 (>= 1.4)
   tzinfo-data
 
 RUBY VERSION
