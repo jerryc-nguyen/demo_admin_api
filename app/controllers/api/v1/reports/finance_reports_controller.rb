@@ -8,7 +8,8 @@ module Api
 
           strategy = ::Reports::ChartOptions::StrategyFactory.for(display_mode, target_date)
           chart_data = ::Reports::ViewFinanceReport::FinanceReportChartQuery.call(strategy)
-          render json: ::Reports::ViewFinanceReport::EchartBuilder.new(chart_data, strategy).call
+          value_types = parse_value_types_param(params[:value_types])
+          render json: ::Reports::ViewFinanceReport::EchartBuilder.new(chart_data, strategy, value_types: value_types).call
         rescue ArgumentError => e
           render json: { error: e.message }, status: :bad_request
         end
@@ -21,6 +22,15 @@ module Api
           Date.parse(date_param)
         rescue ArgumentError
           Date.current
+        end
+
+        def parse_value_types_param(raw)
+          return nil if raw.nil?
+          return [] if raw.strip.empty?
+          raw.split(",")
+             .map(&:strip)
+             .reject(&:empty?)
+             .select { |vt| DailyFinanceReport::VALID_VALUE_TYPES.include?(vt) }
         end
       end
     end
