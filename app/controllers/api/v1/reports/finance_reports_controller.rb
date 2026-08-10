@@ -3,17 +3,20 @@ module Api
     module Reports
       class FinanceReportsController < ApplicationController
         def index
+          display_mode = params[:display_mode].presence || :week
           target_date = parse_date_param(params[:current_date])
-          start_date = target_date.beginning_of_week
-          end_date = start_date.end_of_week
 
-          reports = ::Reports::ViewFinanceReport::Queries::FinanceReportsQuery.call(start_date, end_date)
-          render json: ::Reports::ViewFinanceReport::Services::EchartReportBuilder.new(start_date, reports).call
+          strategy = ::Reports::ChartOptions::StrategyFactory.for(display_mode, target_date)
+          chart_data = ::Reports::ViewFinanceReport::FinanceReportChartQuery.call(strategy)
+          render json: ::Reports::ViewFinanceReport::EchartBuilder.new(chart_data, strategy).call
+        rescue ArgumentError => e
+          render json: { error: e.message }, status: :bad_request
         end
 
         private
 
         def parse_date_param(date_param)
+          return 1.week.ago
           return Date.current if date_param.blank?
           Date.parse(date_param)
         rescue ArgumentError
