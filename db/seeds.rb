@@ -5,9 +5,9 @@
 # Clear existing daily reports
 DailyFinanceReport.destroy_all
 
-# Monday to Sunday sample data for the week of 2026-08-10
-start_date = Date.parse("2026-08-10")
-(0..6).each do |i|
+# Recent 2 weeks of sample data
+start_date = Date.today - 13.days
+(0..13).each do |i|
   date = start_date + i
   DailyFinanceReport.create!(date: date, value_type: "pos_revenue", value: 100.0 + (i * 10))
   DailyFinanceReport.create!(date: date, value_type: "eatclub_revenue", value: 50.0 + (i * 5))
