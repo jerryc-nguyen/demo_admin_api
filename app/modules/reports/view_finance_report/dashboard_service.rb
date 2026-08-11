@@ -31,6 +31,21 @@ module Reports
           value_types: value_types
         ).call
 
+        previous_chart_options = if compare_with_previous && previous_chart_data
+                                   ::Reports::ViewFinanceReport::EchartBuilder.new(
+                                     previous_chart_data,
+                                     previous_strategy,
+                                     value_types: value_types
+                                   ).call
+                                 else
+                                   nil
+                                 end
+
+        merged_chart_options = ::Reports::ViewFinanceReport::EchartOptionMerger.call(
+          chart_options,
+          previous_chart_options
+        )
+
         metrics = ::Reports::ViewFinanceReport::SummaryMetricBuilder.new(
           current_chart_data: current_chart_data,
           previous_chart_data: previous_chart_data,
@@ -39,7 +54,8 @@ module Reports
         ).call
 
         {
-          chart_options: chart_options,
+          chart_options: merged_chart_options,
+          previous_chart_options: previous_chart_options,
           metrics: metrics
         }
       end
