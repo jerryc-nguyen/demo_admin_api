@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :reports do
         resources :finance_reports, only: [:index]
+        resources :daily_finance_reports, only: [:index, :create, :update, :destroy]
       end
     end  
   end
