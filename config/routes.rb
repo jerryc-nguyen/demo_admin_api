@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      post 'auth/register', to: 'auth#register'
+      post 'auth/login', to: 'auth#login'
+
       namespace :reports do
         resources :finance_reports, only: [:index]
         resources :daily_finance_reports, only: [:index, :create, :update, :destroy]

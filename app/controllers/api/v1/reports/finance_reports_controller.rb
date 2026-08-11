@@ -2,6 +2,8 @@ module Api
   module V1
     module Reports
       class FinanceReportsController < ApplicationController
+        include AuthenticateRequest
+
         def index
           date_range_mode = params[:date_range_mode].presence || "this_week"
           display_mode, target_date = resolve_date_range(date_range_mode)

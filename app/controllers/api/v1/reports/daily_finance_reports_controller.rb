@@ -2,6 +2,8 @@ module Api
   module V1
     module Reports
       class DailyFinanceReportsController < ApplicationController
+        include AuthenticateRequest
+
         def index
           reports = DailyFinanceReport.order(date: :desc, id: :desc)
           render json: reports
