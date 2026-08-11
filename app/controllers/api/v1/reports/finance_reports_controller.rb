@@ -3,8 +3,9 @@ module Api
     module Reports
       class FinanceReportsController < ApplicationController
         def index
-          display_mode = params[:display_mode].presence || :week
-          target_date = parse_date_param(params[:current_date])
+          date_range_mode = params[:date_range_mode].presence || "this_week"
+          display_mode, target_date = resolve_date_range(date_range_mode)
+
           value_types = parse_value_types_param(params[:value_types])
           compare_with_previous = ActiveModel::Type::Boolean.new.cast(params[:compare_with_previous])
 
@@ -20,11 +21,17 @@ module Api
 
         private
 
-        def parse_date_param(date_param)
-          return Date.current if date_param.blank?
-          Date.parse(date_param)
-        rescue ArgumentError
-          Date.current
+        def resolve_date_range(mode)
+          case mode
+          when "this_month"
+            [:month, Date.current]
+          when "this_year"
+            [:year, Date.current]
+          when "this_week"
+            [:week, Date.current]
+          else
+            [:week, Date.current] # Fallback
+          end
         end
 
         def parse_value_types_param(raw)

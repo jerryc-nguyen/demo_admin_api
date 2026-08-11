@@ -6,8 +6,8 @@
 DailyFinanceReport.destroy_all
 
 # Recent 2 weeks of sample data
-start_date = Date.today - 13.days
-(0..13).each do |i|
+start_date = Date.today - 3.months
+(0..92).each do |i|
   date = start_date + i
   DailyFinanceReport.create!(date: date, value_type: "pos_revenue", value: 100.0 + (i * 10))
   DailyFinanceReport.create!(date: date, value_type: "eatclub_revenue", value: 50.0 + (i * 5))
