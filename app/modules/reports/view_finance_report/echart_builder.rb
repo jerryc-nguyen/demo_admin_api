@@ -3,9 +3,9 @@ module Reports
 
     class EchartBuilder
       SERIES = [
-        { name: "POS Revenue", value_key: :pos_revenue, stack: "Revenue" },
-        { name: "EatClub Revenue", value_key: :eatclub_revenue, stack: "Revenue" },
-        { name: "Labour Cost", value_key: :labour_cost, stack: nil }
+        { name: "POS Revenue", value_key: :pos_revenue, stack: "Revenue", color: "#3b82f6", prev_color: "rgba(59, 130, 246, 0.5)" },
+        { name: "EatClub Revenue", value_key: :eatclub_revenue, stack: "Revenue", color: "#10b981", prev_color: "rgba(16, 185, 129, 0.5)" },
+        { name: "Labour Cost", value_key: :labour_cost, stack: nil, color: "#f59e0b", prev_color: "rgba(245, 158, 11, 0.5)" }
       ].freeze
 
       def initialize(chart_data, strategy, value_types: nil)
@@ -16,6 +16,8 @@ module Reports
 
       def call
         {
+          legend: { show: true },
+          tooltip: { trigger: "axis" },
           xAxis: { type: "category", data: labels },
           yAxis: { type: "value" },
           series: series_data
@@ -35,7 +37,8 @@ module Reports
           {
             name: series[:name],
             type: "bar",
-            data: data_for(series[:value_key])
+            data: data_for(series[:value_key]),
+            itemStyle: { color: series[:color] }
           }.merge(series[:stack] ? { stack: series[:stack] } : {})
         end
       end

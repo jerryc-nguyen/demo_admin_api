@@ -16,6 +16,12 @@ module Reports
         merged_series = current_options[:series] + previous_options[:series].map do |series|
           merged_item = series.merge(name: "#{series[:name]} (Previous)")
           merged_item[:stack] = "#{series[:stack]} (Previous)" if series[:stack]
+
+          config = ::Reports::ViewFinanceReport::EchartBuilder::SERIES.find { |s| s[:name] == series[:name] }
+          if config && config[:prev_color]
+            merged_item[:itemStyle] = { color: config[:prev_color] }
+          end
+
           merged_item
         end
 
