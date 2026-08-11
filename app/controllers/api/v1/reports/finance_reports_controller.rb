@@ -5,11 +5,15 @@ module Api
         def index
           display_mode = params[:display_mode].presence || :week
           target_date = parse_date_param(params[:current_date])
-
-          strategy = ::Reports::ChartOptions::StrategyFactory.for(display_mode, target_date)
-          chart_data = ::Reports::ViewFinanceReport::FinanceReportChartQuery.call(strategy)
           value_types = parse_value_types_param(params[:value_types])
-          render json: ::Reports::ViewFinanceReport::EchartBuilder.new(chart_data, strategy, value_types: value_types).call
+          compare_with_previous = ActiveModel::Type::Boolean.new.cast(params[:compare_with_previous])
+
+          render json: ::Reports::ViewFinanceReport::DashboardService.call(
+            display_mode: display_mode,
+            target_date: target_date,
+            value_types: value_types,
+            compare_with_previous: compare_with_previous
+          )
         rescue ArgumentError => e
           render json: { error: e.message }, status: :bad_request
         end
@@ -17,7 +21,6 @@ module Api
         private
 
         def parse_date_param(date_param)
-          return 1.week.ago
           return Date.current if date_param.blank?
           Date.parse(date_param)
         rescue ArgumentError

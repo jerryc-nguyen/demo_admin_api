@@ -35,9 +35,13 @@ module Reports
           {
             name: series[:name],
             type: "bar",
-            data: chart_data.map { |row| row[series[:value_key]].to_f }
+            data: data_for(series[:value_key])
           }.merge(series[:stack] ? { stack: series[:stack] } : {})
         end
+      end
+
+      def data_for(value_key)
+        chart_data.map { |row| row[value_key].to_f }
       end
 
       def selected_series
