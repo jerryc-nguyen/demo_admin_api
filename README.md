@@ -100,10 +100,22 @@ bundle exec rspec
 
 ---
 
-## 🐳 Docker Deployment
+## 🐳 Docker & Cloud Deployment
 
-The project includes a production-ready multi-stage `Dockerfile`. To build and run:
+### Local Docker Build
+The project includes a production-ready multi-stage `Dockerfile`. To build and run locally:
 ```bash
 docker build -t admin-api .
 docker run -p 3000:3000 --env-file .env.production admin-api
 ```
+
+### Deploying to Render
+This repository includes a [render.yaml](file:///Users/nhan/works/admin_api/render.yaml) Blueprint configuration for quick deployment to **Render**.
+
+1. Connect your GitHub repository to your Render account.
+2. Click **New +** on the Render dashboard and choose **Blueprint**.
+3. Connect this repository. Render will automatically detect `render.yaml` and configure:
+   * A managed PostgreSQL database (`admin-api-db`).
+   * A web service running the Rails API using the `Dockerfile`.
+4. Render will prompt you for the `RAILS_MASTER_KEY` environment variable. Paste the contents of your local `config/master.key` file.
+5. Click **Apply**. Render will build the Docker container, run database migrations automatically via `db:prepare` in the entrypoint, and launch the service.
