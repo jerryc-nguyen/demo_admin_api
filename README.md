@@ -26,6 +26,16 @@ The application facilitates JWT-based secure user authentication, manages daily 
 
 ---
 
+## 🏗️ Architecture (Modular Monolith)
+
+This project is built using a **Modular Monolith** architectural pattern to ensure clean boundaries between different domain contexts. The design principles and constraints are defined in rules/backend-architecture.md
+
+### High-Level Design
+* **Bounded Contexts**: Business domains are separated into modules inside `app/modules/<module_name>/` (for example, the reports analytics module is located at app/modules/reports).
+* **Persistence & Models**: Active Record models reside in the standard Rails location (app/models/) and are shared across contexts to allow standard migrations and persistence.
+
+---
+
 ## 📡 API Endpoints
 
 ### 🔐 Authentication
